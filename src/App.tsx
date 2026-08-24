@@ -16,7 +16,6 @@ import { ProfileView } from './features/profile/ProfileView';
 import { AuthView } from './features/auth/AuthView';
 import { FirstAccessWizard } from './features/onboarding/FirstAccessWizard';
 import { AppProvider, useApp } from './context/AppContext';
-import { initialEvents, initialMedicationSchedules } from './data/mockData';
 import { TimelineEvent, MedicationSchedule, FamilyMember, Child } from './types';
 import { registerServiceWorker } from './pwa';
 
@@ -40,7 +39,7 @@ function MainApp() {
       const raw = localStorage.getItem('nene_sprint2_events');
       if (raw) return JSON.parse(raw);
     } catch {}
-    return initialEvents;
+    return [];
   });
 
   const [medicationSchedules, setMedicationSchedules] = useState<MedicationSchedule[]>(() => {
@@ -48,7 +47,7 @@ function MainApp() {
       const raw = localStorage.getItem('nene_sprint2_med_schedules');
       if (raw) return JSON.parse(raw);
     } catch {}
-    return initialMedicationSchedules;
+    return [];
   });
 
   useEffect(() => {
