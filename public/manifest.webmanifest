@@ -10,7 +10,7 @@
   "categories": ["lifestyle", "parenting", "productivity", "health"],
   "icons": [
     {
-      "src": "/icon.svg",
+      "src": "/favicon-e.png",
       "sizes": "192x192 512x512",
       "type": "image/svg+xml",
       "purpose": "any"
