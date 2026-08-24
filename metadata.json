@@ -1,0 +1,6 @@
+{
+  "name": "NENÊ",
+  "description": "Organize a rotina e os cuidados de quem mais importa. PWA brasileiro para cuidados e rotinas infantis com foco multifilhos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

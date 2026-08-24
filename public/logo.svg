@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 160" width="100%" height="100%">
+  <!-- NENÊ Wordmark in official dark green #133A34 with coral circumflex #F08A6B -->
+  <!-- First 'n' -->
+  <path d="M 40 140 L 40 75 C 40 52 56 42 74 42 C 92 42 108 52 108 75 L 108 140" fill="none" stroke="#133A34" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- First 'e' -->
+  <path d="M 195 95 C 195 65 174 42 145 42 C 114 42 92 68 92 102 C 92 136 116 155 148 155 C 172 155 188 144 196 130" fill="none" stroke="#133A34" stroke-width="24" stroke-linecap="round"/>
+  <path d="M 94 95 L 193 95" fill="none" stroke="#133A34" stroke-width="24" stroke-linecap="round"/>
+
+  <!-- Second 'n' -->
+  <path d="M 235 140 L 235 75 C 235 52 251 42 269 42 C 287 42 303 52 303 75 L 303 140" fill="none" stroke="#133A34" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Circumflex accent ^ over second 'e' -->
+  <path d="M 368 28 L 392 6 L 416 28" fill="none" stroke="#F08A6B" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Second 'e' with circumflex -->
+  <path d="M 440 95 C 440 65 419 42 390 42 C 359 42 337 68 337 102 C 337 136 361 155 393 155 C 417 155 433 144 441 130" fill="none" stroke="#133A34" stroke-width="24" stroke-linecap="round"/>
+  <path d="M 339 95 L 438 95" fill="none" stroke="#133A34" stroke-width="24" stroke-linecap="round"/>
+</svg>

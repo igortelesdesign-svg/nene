@@ -1,0 +1,243 @@
+import { Child, Family, TimelineEvent, User, MedicationSchedule } from '../types';
+
+export const currentUser: User = {
+  id: 'user-ana',
+  name: 'Ana',
+  email: 'ana.silva@exemplo.com.br',
+  role: 'admin',
+  relation: 'Mãe',
+  createdAt: '2026-03-12T08:00:00.000Z',
+  lastAccess: '2026-08-24T08:00:00.000Z',
+};
+
+export const currentFamily: Family = {
+  id: 'family-01',
+  name: 'Família de Ana',
+  creatorId: 'user-ana',
+  createdAt: '2026-03-12T08:00:00.000Z',
+  members: [
+    {
+      id: 'mem-1',
+      userId: 'user-ana',
+      name: 'Ana',
+      email: 'ana.silva@exemplo.com.br',
+      role: 'admin',
+      relation: 'Mãe',
+      joinedAt: '2026-03-12',
+    },
+    {
+      id: 'mem-2',
+      userId: 'user-lucas',
+      name: 'Lucas',
+      email: 'lucas.silva@exemplo.com.br',
+      role: 'responsible',
+      relation: 'Pai',
+      joinedAt: '2026-03-12',
+    },
+    {
+      id: 'mem-3',
+      userId: 'user-maria',
+      name: 'Vovó Maria',
+      email: 'maria.avó@exemplo.com.br',
+      role: 'caregiver',
+      relation: 'Avó',
+      joinedAt: '2026-04-01',
+    },
+  ],
+};
+
+// Samyr & Suayla (Gêmeos, 5 meses)
+export const initialChildren: Child[] = [
+  {
+    id: 'child-samyr',
+    familyId: 'family-01',
+    name: 'Samyr',
+    sex: 'male',
+    gender: 'male',
+    birthDate: '2026-03-12', // 5 meses
+    bloodType: 'A+',
+    pediatrician: 'Dra. Camila Nogueira',
+    pediatricianPhone: '(11) 98765-4321',
+    allergies: ['Suspeita de sensibilidade a PLV'],
+    notes: 'Costuma mamar mais tranquilo após o banho morno.',
+    avatarBgColor: '#89A589',
+    active: true,
+    createdAt: '2026-03-12',
+  },
+  {
+    id: 'child-suayla',
+    familyId: 'family-01',
+    name: 'Suayla',
+    sex: 'female',
+    gender: 'female',
+    birthDate: '2026-03-12', // 5 meses
+    bloodType: 'A+',
+    pediatrician: 'Dra. Camila Nogueira',
+    pediatricianPhone: '(11) 98765-4321',
+    allergies: ['Nenhuma alergia conhecida'],
+    notes: 'Iniciou introdução alimentar com frutinhas este mês.',
+    avatarBgColor: '#F08A6B',
+    active: true,
+    createdAt: '2026-03-12',
+  },
+];
+
+export const initialMedicationSchedules: MedicationSchedule[] = [
+  {
+    id: 'med-samyr-1',
+    childId: 'child-samyr',
+    name: 'Amoxicilina',
+    prescriptionNotes: 'Tratamento orientado pela Dra. Camila para otite média.',
+    startDate: '2026-08-20',
+    endDate: '2026-08-27',
+    scheduledTimes: ['08:00', '20:00'],
+    active: true,
+  },
+  {
+    id: 'med-samyr-2',
+    childId: 'child-samyr',
+    name: 'Vitamina D',
+    prescriptionNotes: 'Uso diário pela manhã conforme orientação do pediatra.',
+    startDate: '2026-04-01',
+    scheduledTimes: ['09:00'],
+    active: true,
+  },
+  {
+    id: 'med-suayla-1',
+    childId: 'child-suayla',
+    name: 'Vitamina D',
+    prescriptionNotes: 'Uso diário pela manhã conforme orientação do pediatra.',
+    startDate: '2026-04-01',
+    scheduledTimes: ['09:00'],
+    active: true,
+  },
+];
+
+export const initialEvents: TimelineEvent[] = [
+  // Samyr - 08:04 Medicamento registrado
+  {
+    id: 'evt-01',
+    childId: 'child-samyr',
+    familyId: 'family-01',
+    category: 'medication',
+    medicationName: 'Amoxicilina',
+    scheduledTime: '08:00',
+    actualTime: '08:04',
+    status: 'administered',
+    timestamp: '2026-08-24T08:04:00.000Z',
+    createdBy: 'Ana',
+    notes: 'Administrado conforme orientação médica.',
+  },
+  // Suayla - 08:15 Alimentação
+  {
+    id: 'evt-02',
+    childId: 'child-suayla',
+    familyId: 'family-01',
+    category: 'feeding',
+    feedingType: 'breast',
+    durationMinutes: 20,
+    timestamp: '2026-08-24T08:15:00.000Z',
+    createdBy: 'Ana',
+    notes: 'Mamou tranquilamente.',
+  },
+  // Samyr - 08:32 Alimentação
+  {
+    id: 'evt-03',
+    childId: 'child-samyr',
+    familyId: 'family-01',
+    category: 'feeding',
+    feedingType: 'bottle',
+    amountMl: 120,
+    timestamp: '2026-08-24T08:32:00.000Z',
+    createdBy: 'Lucas',
+    notes: 'Mamadeira completa.',
+  },
+  // Suayla - 09:20 Fralda
+  {
+    id: 'evt-04',
+    childId: 'child-suayla',
+    familyId: 'family-01',
+    category: 'diaper',
+    diaperType: 'wet',
+    timestamp: '2026-08-24T09:20:00.000Z',
+    createdBy: 'Ana',
+    notes: 'Fralda molhada trocada.',
+  },
+  // Samyr - 09:41 Dormiu
+  {
+    id: 'evt-05',
+    childId: 'child-samyr',
+    familyId: 'family-01',
+    category: 'sleep',
+    startTime: '2026-08-24T09:41:00.000Z',
+    endTime: '2026-08-24T10:23:00.000Z',
+    durationMinutes: 42,
+    quality: 'calm',
+    timestamp: '2026-08-24T09:41:00.000Z',
+    createdBy: 'Ana',
+    notes: 'Soneca tranquila no berço.',
+  },
+  // Suayla - 10:10 Dormiu
+  {
+    id: 'evt-06',
+    childId: 'child-suayla',
+    familyId: 'family-01',
+    category: 'sleep',
+    startTime: '2026-08-24T10:10:00.000Z',
+    endTime: '2026-08-24T11:00:00.000Z',
+    durationMinutes: 50,
+    quality: 'calm',
+    timestamp: '2026-08-24T10:10:00.000Z',
+    createdBy: 'Lucas',
+    notes: 'Soneca da manhã.',
+  },
+  // Samyr - Consulta Pediátrica de Rotina
+  {
+    id: 'evt-07',
+    childId: 'child-samyr',
+    familyId: 'family-01',
+    category: 'appointment',
+    specialty: 'Pediatria de Rotina',
+    doctorName: 'Dra. Camila Nogueira',
+    location: 'Clínica Bem Cuidar - Sala 204',
+    scheduledDate: '2026-08-24',
+    scheduledTime: '14:30',
+    status: 'upcoming',
+    questionsToAsk: [
+      'Perguntar sobre introdução alimentar e frutas recomendadas',
+      'Avaliar evolução após início das frutinhas',
+      'Confirmar data da próxima dose de vacina',
+    ],
+    timestamp: '2026-08-24T14:30:00.000Z',
+    createdBy: 'Ana',
+    notes: 'Levar caderneta de vacinação.',
+  },
+  // Samyr - 20:00 Próximo Medicamento Programado
+  {
+    id: 'evt-08',
+    childId: 'child-samyr',
+    familyId: 'family-01',
+    category: 'medication',
+    medicationName: 'Amoxicilina',
+    scheduledTime: '20:00',
+    status: 'pending',
+    timestamp: '2026-08-24T20:00:00.000Z',
+    createdBy: 'Ana',
+    notes: 'Horário orientado pelo pediatra.',
+  },
+  // Suayla - Alimentação (Sólidos / Frutinha)
+  {
+    id: 'evt-09',
+    childId: 'child-suayla',
+    familyId: 'family-01',
+    category: 'feeding',
+    feedingType: 'solids',
+    foodName: 'Banana amassada',
+    preparationMethod: 'Fruta madura fresca',
+    acceptance: 'good',
+    reaction: 'none',
+    timestamp: '2026-08-24T12:15:00.000Z',
+    createdBy: 'Vovó Maria',
+    notes: 'Aceitou bem a frutinha!',
+  },
+];
