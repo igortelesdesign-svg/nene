@@ -185,9 +185,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       </div>
                     </div>
                   ) : (
-                    <div className="mt-0.5 flex items-center justify-between">
-                      <p className="text-xs text-[#133A34]">🍼 Alimentação</p>
-                      <p className="text-[10px] text-[#89A589] font-bold">Em breve</p>
+                    <div className="mt-1">
+                      <p className="text-xs text-[#89A589] font-medium">
+                        Nenhum cuidado programado
+                      </p>
                     </div>
                   )}
                 </div>
