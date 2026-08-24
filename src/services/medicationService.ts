@@ -3,57 +3,9 @@ import { Medication, MedicationLog, MedicationStatus, NewMedicationRegistrationI
 const MEDS_STORAGE_KEY = 'nene_sprint3_medications';
 const LOGS_STORAGE_KEY = 'nene_sprint3_medication_logs';
 
-const initialMedications: Medication[] = [
-  {
-    id: 'med-samyr-amox',
-    childId: 'child-samyr',
-    familyId: 'family-01',
-    name: 'Amoxicilina',
-    dosageManual: '2,5 ml a cada 12h',
-    prescriptionNotes: 'Tratamento de 7 dias orientado pela Dra. Camila para otite.',
-    active: true,
-    createdAt: '2026-08-20T08:00:00.000Z',
-  },
-  {
-    id: 'med-samyr-vitd',
-    childId: 'child-samyr',
-    familyId: 'family-01',
-    name: 'Vitamina D',
-    dosageManual: '2 gotas ao dia',
-    prescriptionNotes: 'Suplementação diária orientada pelo pediatra.',
-    active: true,
-    createdAt: '2026-04-01T08:00:00.000Z',
-  },
-  {
-    id: 'med-suayla-vitd',
-    childId: 'child-suayla',
-    familyId: 'family-01',
-    name: 'Vitamina D',
-    dosageManual: '2 gotas ao dia',
-    prescriptionNotes: 'Suplementação diária orientada pelo pediatra.',
-    active: true,
-    createdAt: '2026-04-01T08:00:00.000Z',
-  },
-];
+const initialMedications: Medication[] = [];
 
-const initialLogs: MedicationLog[] = [
-  {
-    id: 'evt-01',
-    medicationId: 'med-samyr-amox',
-    childId: 'child-samyr',
-    familyId: 'family-01',
-    medicationName: 'Amoxicilina',
-    scheduledTime: '08:00',
-    actualTime: '08:04',
-    status: 'administered',
-    dosageManual: '2,5 ml',
-    prescriptionNotes: 'Tratamento de 7 dias orientado pela Dra. Camila.',
-    notes: 'Administrado conforme orientação médica. Tomou bem.',
-    administeredBy: 'Ana',
-    timestamp: '2026-08-24T08:04:00.000Z',
-    createdAt: '2026-08-24T08:04:00.000Z',
-  },
-];
+const initialLogs: MedicationLog[] = [];
 
 function getStoredMeds(): Medication[] {
   try {
