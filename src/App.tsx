@@ -34,21 +34,9 @@ function MainApp() {
 
   const [activeTab, setActiveTab] = useState<NavTab>('hoje');
   const [isQuickRegisterOpen, setIsQuickRegisterOpen] = useState(false);
-  const [events, setEvents] = useState<TimelineEvent[]>(() => {
-    try {
-      const raw = localStorage.getItem('nene_sprint2_events');
-      if (raw) return JSON.parse(raw);
-    } catch {}
-    return [];
-  });
+  const [events, setEvents] = useState<TimelineEvent[]>([]);
 
-  const [medicationSchedules, setMedicationSchedules] = useState<MedicationSchedule[]>(() => {
-    try {
-      const raw = localStorage.getItem('nene_sprint2_med_schedules');
-      if (raw) return JSON.parse(raw);
-    } catch {}
-    return [];
-  });
+  const [medicationSchedules, setMedicationSchedules] = useState<MedicationSchedule[]>([]);
 
   useEffect(() => {
     localStorage.setItem('nene_sprint2_events', JSON.stringify(events));
