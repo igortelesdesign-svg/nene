@@ -80,6 +80,87 @@ export const ChildReportView: React.FC<ChildReportViewProps> = ({
     window.print();
   };
 
+  const formatEventDetails = (event: TimelineEvent) => {
+    switch (event.category) {
+      case 'feeding': {
+        const types: Record<string, string> = {
+          breast: 'Amamentação',
+          formula: 'Fórmula',
+          bottle: 'Mamadeira',
+          solids: 'Alimento sólido',
+          water: 'Água',
+          other: 'Outro',
+        };
+
+        const details = [types[event.feedingType] || 'Alimentação'];
+
+        if (event.amountMl) details.push(`${event.amountMl} ml`);
+        if (event.durationMinutes) details.push(`${event.durationMinutes} min`);
+        if (event.foodName) details.push(event.foodName);
+
+        return details.join(' • ');
+      }
+
+      case 'sleep':
+        return event.durationMinutes
+          ? `Sono • ${formatSleep(event.durationMinutes)}`
+          : 'Sono registrado';
+
+      case 'diaper': {
+        const types: Record<string, string> = {
+          wet: 'Molhada',
+          dirty: 'Suja',
+          both: 'Molhada e suja',
+        };
+
+        return `Fralda • ${types[event.diaperType] || event.diaperType}`;
+      }
+
+      case 'temperature':
+        return `Temperatura • ${Number(event.temperatureC).toFixed(1)}°C`;
+
+      case 'growth': {
+        const values = [];
+        if (event.weightKg) values.push(`${event.weightKg} kg`);
+        if (event.heightCm) values.push(`${event.heightCm} cm`);
+        if (event.headCircumferenceCm) {
+          values.push(`PC ${event.headCircumferenceCm} cm`);
+        }
+
+        return `Crescimento${values.length ? ` • ${values.join(' • ')}` : ''}`;
+      }
+
+      case 'appointment':
+        return `Consulta • ${event.specialty || 'Sem especialidade'}${
+          event.doctorName ? ` • ${event.doctorName}` : ''
+        }`;
+
+      case 'vaccine':
+        return `Vacina • ${event.vaccineName}${
+          event.doseNumber ? ` • ${event.doseNumber}` : ''
+        }`;
+
+      case 'note':
+        return `${event.title || 'Observação'}${
+          event.content ? ` • ${event.content}` : ''
+        }`;
+
+      case 'medication':
+        return `Medicamento • ${event.medicationName}${
+          event.dosage ? ` • ${event.dosage}` : ''
+        }`;
+
+      default:
+        return 'Registro de cuidado';
+    }
+  };
+
+  const sortedEvents = [...filteredEvents].sort(
+    (a, b) =>
+      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  );
+
+
   return (
     <div
       id="child-report-print-area"
@@ -196,6 +277,66 @@ export const ChildReportView: React.FC<ChildReportViewProps> = ({
         <p className="text-[11px] text-[#89A589] mt-1">
           Últimos {period} dias
         </p>
+      </div>
+
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <CalendarDays size={16} className="text-[#89A589]" />
+          <h2 className="text-sm font-extrabold text-[#133A34]">
+            Ocorrências do período
+          </h2>
+        </div>
+
+        {sortedEvents.length === 0 ? (
+          <div className="nene-card p-4">
+            <p className="text-xs text-[#133A34]/60 text-center">
+              Nenhum registro encontrado neste período.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {sortedEvents.map((event) => {
+              const date = new Date(event.timestamp);
+
+              return (
+                <div
+                  key={event.id}
+                  className="nene-card p-4 break-inside-avoid"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-xs font-extrabold text-[#133A34]">
+                        {formatEventDetails(event)}
+                      </p>
+
+                      {event.notes && (
+                        <p className="text-[11px] text-[#133A34]/65 mt-1">
+                          {event.notes}
+                        </p>
+                      )}
+
+                      <p className="text-[10px] text-[#89A589] mt-2">
+                        Por {event.createdBy || 'Responsável'}
+                      </p>
+                    </div>
+
+                    <div className="text-right shrink-0">
+                      <p className="text-[10px] font-bold text-[#133A34]">
+                        {date.toLocaleDateString('pt-BR')}
+                      </p>
+                      <p className="text-[10px] text-[#89A589]">
+                        {date.toLocaleTimeString('pt-BR', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <button
