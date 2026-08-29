@@ -262,7 +262,36 @@ export const careService = {
       throw error;
     }
 
-    return ((data ?? []) as CareEventRow[]).map((row) => rowToEvent(row));
+    const rows = (data ?? []) as CareEventRow[];
+
+    if (rows.length === 0) {
+      return [];
+    }
+
+    const creatorIds = [...new Set(rows.map((row) => row.created_by).filter(Boolean))];
+
+    const { data: profilesData, error: profilesError } = await supabase
+      .from('profiles')
+      .select('id, full_name')
+      .in('id', creatorIds);
+
+    if (profilesError) {
+      console.error('Erro ao carregar nomes dos responsáveis:', profilesError);
+    }
+
+    const creatorNameById = new Map<string, string>(
+      ((profilesData ?? []) as Array<{ id: string; full_name: string }>).map((profile) => [
+        profile.id,
+        profile.full_name,
+      ])
+    );
+
+    return rows.map((row) =>
+      rowToEvent(
+        row,
+        creatorNameById.get(row.created_by) || 'Responsável'
+      )
+    );
   },
 
   async deleteEvent(eventId: string): Promise<void> {
