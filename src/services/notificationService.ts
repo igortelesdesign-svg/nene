@@ -2,14 +2,14 @@ import { Capacitor } from '@capacitor/core';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import type { AppointmentEvent } from '../types';
 
-function notificationId(id: string): number {
+function notificationId(id: string, offset = 0): number {
   let hash = 0;
 
   for (let i = 0; i < id.length; i++) {
     hash = (hash * 31 + id.charCodeAt(i)) | 0;
   }
 
-  return Math.abs(hash) || 1;
+  return (Math.abs(hash) || 1) + offset;
 }
 
 export const notificationService = {
@@ -39,28 +39,56 @@ export const notificationService = {
     if (Number.isNaN(scheduledAt.getTime())) return;
     if (scheduledAt.getTime() <= Date.now()) return;
 
-    // Avisar 1 hora antes.
-    const notifyAt = new Date(scheduledAt.getTime() - 60 * 60 * 1000);
+    const oneDayBefore = new Date(
+      scheduledAt.getTime() - 24 * 60 * 60 * 1000
+    );
 
-    if (notifyAt.getTime() <= Date.now()) return;
+    const oneHourBefore = new Date(
+      scheduledAt.getTime() - 60 * 60 * 1000
+    );
+
+    const notifications = [];
+
+    if (oneDayBefore.getTime() > Date.now()) {
+      notifications.push({
+        id: notificationId(event.id, 1),
+        title: 'Consulta amanhã 🩺',
+        body: `${event.specialty} com ${event.doctorName} amanhã às ${event.scheduledTime}.`,
+        schedule: {
+          at: oneDayBefore,
+          allowWhileIdle: true,
+        },
+        extra: {
+          eventId: event.id,
+          childId: event.childId,
+          type: 'appointment',
+          reminder: '24h',
+        },
+      });
+    }
+
+    if (oneHourBefore.getTime() > Date.now()) {
+      notifications.push({
+        id: notificationId(event.id, 2),
+        title: 'Consulta chegando 🩺',
+        body: `${event.specialty} com ${event.doctorName} em 1 hora.`,
+        schedule: {
+          at: oneHourBefore,
+          allowWhileIdle: true,
+        },
+        extra: {
+          eventId: event.id,
+          childId: event.childId,
+          type: 'appointment',
+          reminder: '1h',
+        },
+      });
+    }
+
+    if (notifications.length === 0) return;
 
     await LocalNotifications.schedule({
-      notifications: [
-        {
-          id: notificationId(event.id),
-          title: 'Consulta chegando 🩺',
-          body: `${event.specialty} com ${event.doctorName} em 1 hora.`,
-          schedule: {
-            at: notifyAt,
-            allowWhileIdle: true,
-          },
-          extra: {
-            eventId: event.id,
-            childId: event.childId,
-            type: 'appointment',
-          },
-        },
-      ],
+      notifications,
     });
   },
 
@@ -77,7 +105,10 @@ export const notificationService = {
     if (!Capacitor.isNativePlatform()) return;
 
     await LocalNotifications.cancel({
-      notifications: [{ id: notificationId(eventId) }],
+      notifications: [
+        { id: notificationId(eventId, 1) },
+        { id: notificationId(eventId, 2) },
+      ],
     });
   },
 };
