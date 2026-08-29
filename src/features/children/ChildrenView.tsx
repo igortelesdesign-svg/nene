@@ -8,7 +8,8 @@ import {
   Stethoscope,
   X,
   Edit2,
-  Sparkles
+  Sparkles,
+  FileText
 } from 'lucide-react';
 import { Child, TimelineEvent } from '../../types';
 import { calculateChildAge } from '../../utils/dateUtils';
@@ -16,6 +17,7 @@ import { formatChildSex } from '../../utils/childUtils';
 import { AddChildModal } from './AddChildModal';
 import { EditChildModal } from './EditChildModal';
 import { useApp } from '../../context/AppContext';
+import { ChildReportView } from '../reports/ChildReportView';
 
 interface ChildrenViewProps {
   childrenList: Child[];
@@ -36,6 +38,17 @@ export const ChildrenView: React.FC<ChildrenViewProps> = ({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedChildDetail, setSelectedChildDetail] = useState<Child | null>(null);
   const [editingChild, setEditingChild] = useState<Child | null>(null);
+  const [reportChild, setReportChild] = useState<Child | null>(null);
+
+  if (reportChild) {
+    return (
+      <ChildReportView
+        child={reportChild}
+        events={events}
+        onBack={() => setReportChild(null)}
+      />
+    );
+  }
 
   const handleSaveEdit = async (childId: string, updates: Partial<Child>) => {
     await updateChild(childId, updates);
@@ -142,6 +155,15 @@ export const ChildrenView: React.FC<ChildrenViewProps> = ({
                       className="px-3 py-1.5 rounded-full bg-[#133A34]/5 hover:bg-[#133A34]/10 text-xs font-bold text-[#133A34] flex items-center gap-1 cursor-pointer transition-all"
                     >
                       <span>Ver perfil</span>
+                    </button>
+
+                    <button
+                      onClick={() => setReportChild(child)}
+                      type="button"
+                      className="px-3 py-1.5 rounded-full bg-[#89A589]/15 hover:bg-[#89A589]/25 text-xs font-bold text-[#133A34] flex items-center gap-1 cursor-pointer transition-all"
+                    >
+                      <FileText size={13} />
+                      <span>Relatório</span>
                     </button>
 
                     <button
