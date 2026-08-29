@@ -7,6 +7,7 @@ import {
   Baby,
   Thermometer,
   CalendarDays,
+  Share2,
 } from 'lucide-react';
 import { Child, TimelineEvent } from '../../types';
 
@@ -75,8 +76,15 @@ export const ChildReportView: React.FC<ChildReportViewProps> = ({
     return `${hours}h ${remainingMinutes}min`;
   };
 
+  const handleGeneratePDF = () => {
+    window.print();
+  };
+
   return (
-    <div className="space-y-5 px-5 pt-3 pb-24 max-w-xl mx-auto">
+    <div
+      id="child-report-print-area"
+      className="space-y-5 px-5 pt-3 pb-24 max-w-xl mx-auto"
+    >
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -189,6 +197,15 @@ export const ChildReportView: React.FC<ChildReportViewProps> = ({
           Últimos {period} dias
         </p>
       </div>
+
+      <button
+        type="button"
+        onClick={handleGeneratePDF}
+        className="w-full py-3.5 rounded-2xl bg-[#133A34] text-[#FFF6EE] text-sm font-extrabold flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition"
+      >
+        <Share2 size={17} />
+        Gerar / Compartilhar PDF
+      </button>
 
       <p className="text-[10px] leading-relaxed text-[#133A34]/50 text-center px-3">
         Este relatório organiza registros informados pelos responsáveis e não

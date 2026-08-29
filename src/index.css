@@ -62,3 +62,42 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Relatório NENÊ — impressão/PDF */
+@media print {
+  body {
+    background: white !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #child-report-print-area,
+  #child-report-print-area * {
+    visibility: visible;
+  }
+
+  #child-report-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: none !important;
+    padding: 24px !important;
+    background: white !important;
+  }
+
+  #bottom-navigation-bar {
+    display: none !important;
+  }
+
+  button {
+    display: none !important;
+  }
+
+  .nene-card {
+    break-inside: avoid;
+    box-shadow: none !important;
+  }
+}
