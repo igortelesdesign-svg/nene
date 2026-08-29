@@ -20,6 +20,7 @@ import { TimelineEvent, MedicationSchedule, FamilyMember, Child } from './types'
 import { registerServiceWorker } from './pwa';
 
 import { medicationService } from './services/medicationService';
+import { careService } from './services/careService';
 
 function MainApp() {
   const {
@@ -39,15 +40,59 @@ function MainApp() {
   const [medicationSchedules, setMedicationSchedules] = useState<MedicationSchedule[]>([]);
 
   useEffect(() => {
-    localStorage.setItem('nene_sprint2_events', JSON.stringify(events));
-  }, [events]);
+    let cancelled = false;
+
+    async function loadCareEvents() {
+      if (!user || !family) {
+        setEvents([]);
+        return;
+      }
+
+      try {
+        const loadedEvents = await careService.getEvents(family.id);
+
+        if (!cancelled) {
+          setEvents(loadedEvents);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar cuidados do Supabase:', error);
+
+        if (!cancelled) {
+          setEvents([]);
+        }
+      }
+    }
+
+    loadCareEvents();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id, family?.id]);
 
   useEffect(() => {
     localStorage.setItem('nene_sprint2_med_schedules', JSON.stringify(medicationSchedules));
   }, [medicationSchedules]);
 
-  const handleAddEvent = (newEvent: TimelineEvent) => {
-    setEvents((prev) => [newEvent, ...prev]);
+  const handleAddEvent = async (newEvent: TimelineEvent) => {
+    if (!user) {
+      console.error('Não foi possível registrar o cuidado: usuário não autenticado.');
+      return;
+    }
+
+    // Medicações permanecem no fluxo próprio até a tabela
+    // medications / medication_logs ser conectada ao Supabase.
+    if (newEvent.category === 'medication') {
+      setEvents((prev) => [newEvent, ...prev]);
+      return;
+    }
+
+    try {
+      const savedEvent = await careService.createEvent(newEvent, user.id);
+      setEvents((prev) => [savedEvent, ...prev]);
+    } catch (error) {
+      console.error('Erro ao salvar cuidado no Supabase:', error);
+    }
   };
 
   const handleUpdateEventStatus = async (
