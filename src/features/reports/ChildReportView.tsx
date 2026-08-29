@@ -194,6 +194,10 @@ export const ChildReportView: React.FC<ChildReportViewProps> = ({
           </span>
         </div>
 
+        <p className="hidden print:block text-xs font-bold text-[#133A34] mb-2">
+          Período analisado: últimos {period} dias
+        </p>
+
         <div className="grid grid-cols-3 gap-2">
           {[7, 30, 90].map((days) => (
             <button
