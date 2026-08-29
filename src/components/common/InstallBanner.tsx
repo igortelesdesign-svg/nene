@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Download, Share, PlusSquare, X } from 'lucide-react';
 import { onInstallPromptChange, promptPWAInstall, isPWAStandalone } from '../../pwa';
 import { AppIcon } from './AppIcon';
+import { Capacitor } from '@capacitor/core';
 
 export const InstallBanner: React.FC = () => {
   const [canInstall, setCanInstall] = useState<boolean>(false);
@@ -17,7 +18,9 @@ export const InstallBanner: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
-  if (isStandalone || isDismissed) return null;
+  const isNativeApp = Capacitor.isNativePlatform();
+
+  if (isNativeApp || isStandalone || isDismissed) return null;
 
   const isIOS =
     typeof navigator !== 'undefined' &&

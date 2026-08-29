@@ -10,7 +10,8 @@ import {
   Check, 
   Plus, 
   ChevronRight,
-  Sparkles
+  Sparkles,
+  Trash2
 } from 'lucide-react';
 import { Child, TimelineEvent, AppointmentEvent, MedicationSchedule } from '../../types';
 
@@ -20,7 +21,23 @@ interface AgendaViewProps {
   events: TimelineEvent[];
   medicationSchedules: MedicationSchedule[];
   onAddQuestion: (eventId: string, question: string) => void;
+  onDeleteAppointment: (eventId: string) => Promise<void>;
 }
+
+const formatAppointmentDateLabel = (scheduledDate: string) => {
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+
+  const toKey = (date: Date) =>
+    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+  if (scheduledDate === toKey(today)) return 'Hoje';
+  if (scheduledDate === toKey(tomorrow)) return 'Amanhã';
+
+  const [year, month, day] = scheduledDate.split('-');
+  return `${day}/${month}/${year}`;
+};
 
 export const AgendaView: React.FC<AgendaViewProps> = ({
   childrenList,
@@ -28,6 +45,7 @@ export const AgendaView: React.FC<AgendaViewProps> = ({
   events,
   medicationSchedules,
   onAddQuestion,
+  onDeleteAppointment,
 }) => {
   const [newQuestionText, setNewQuestionText] = useState('');
   const [selectedAppointmentId, setSelectedAppointmentId] = useState<string | null>(null);
@@ -111,7 +129,9 @@ export const AgendaView: React.FC<AgendaViewProps> = ({
                     <span className="text-xs font-bold text-[#133A34] block">
                       {apt.scheduledTime}
                     </span>
-                    <span className="text-[10px] text-[#89A589] block">Hoje</span>
+                    <span className="text-[10px] text-[#89A589] block">
+                      {formatAppointmentDateLabel(apt.scheduledDate)}
+                    </span>
                   </div>
                 </div>
 
@@ -177,6 +197,25 @@ export const AgendaView: React.FC<AgendaViewProps> = ({
                       </button>
                     </div>
                   )}
+                </div>
+
+                <div className="flex justify-end pt-1">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const confirmed = window.confirm(
+                        'Excluir esta consulta? O lembrete associado também será cancelado.'
+                      );
+
+                      if (!confirmed) return;
+
+                      await onDeleteAppointment(apt.id);
+                    }}
+                    className="px-3 py-1.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-[10px] font-bold flex items-center gap-1.5 cursor-pointer hover:bg-red-100 transition-colors"
+                  >
+                    <Trash2 size={12} />
+                    Excluir consulta
+                  </button>
                 </div>
               </div>
             );

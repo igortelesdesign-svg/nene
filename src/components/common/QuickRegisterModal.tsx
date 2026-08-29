@@ -87,6 +87,15 @@ export const QuickRegisterModal: React.FC<QuickRegisterModalProps> = ({
   // Appointment
   const [appointmentSpecialty, setAppointmentSpecialty] = useState<string>('Pediatria');
   const [appointmentDoctor, setAppointmentDoctor] = useState<string>('Dra. Camila Nogueira');
+  const [appointmentDate, setAppointmentDate] = useState<string>(
+    new Date().toISOString().split('T')[0]
+  );
+  const [appointmentTime, setAppointmentTime] = useState<string>(
+    new Date().toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+  );
 
   // General note / Other
   const [noteText, setNoteText] = useState<string>('');
@@ -196,8 +205,8 @@ export const QuickRegisterModal: React.FC<QuickRegisterModalProps> = ({
           category: 'appointment',
           specialty: appointmentSpecialty,
           doctorName: appointmentDoctor,
-          scheduledDate: new Date().toISOString().split('T')[0],
-          scheduledTime: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+          scheduledDate: appointmentDate,
+          scheduledTime: appointmentTime,
           status: 'upcoming',
         };
         break;
@@ -742,6 +751,31 @@ export const QuickRegisterModal: React.FC<QuickRegisterModalProps> = ({
                       placeholder="Ex: Dra. Camila Nogueira"
                       className="w-full px-3 py-2 text-xs rounded-xl border border-[#133A34]/20 bg-[#FFF6EE]"
                     />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs font-bold text-[#133A34] block mb-1">
+                        Data da consulta
+                      </label>
+                      <input
+                        type="date"
+                        value={appointmentDate}
+                        onChange={(e) => setAppointmentDate(e.target.value)}
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-[#133A34]/20 bg-[#FFF6EE]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-bold text-[#133A34] block mb-1">
+                        Horário
+                      </label>
+                      <input
+                        type="time"
+                        value={appointmentTime}
+                        onChange={(e) => setAppointmentTime(e.target.value)}
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-[#133A34]/20 bg-[#FFF6EE]"
+                      />
+                    </div>
                   </div>
                 </div>
               )}

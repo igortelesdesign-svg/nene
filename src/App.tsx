@@ -21,6 +21,7 @@ import { registerServiceWorker } from './pwa';
 
 import { medicationService } from './services/medicationService';
 import { careService } from './services/careService';
+import { notificationService } from './services/notificationService';
 
 function MainApp() {
   const {
@@ -89,9 +90,33 @@ function MainApp() {
 
     try {
       const savedEvent = await careService.createEvent(newEvent, user.id);
+
+      if (savedEvent.category === 'appointment') {
+        await notificationService.scheduleAppointment(savedEvent);
+
+        const pendingNotifications =
+          await notificationService.getPendingNotifications();
+
+        console.log(
+          'Notificações pendentes do NENÊ:',
+          pendingNotifications
+        );
+      }
+
       setEvents((prev) => [savedEvent, ...prev]);
     } catch (error) {
       console.error('Erro ao salvar cuidado no Supabase:', error);
+    }
+  };
+
+  const handleDeleteAppointment = async (eventId: string) => {
+    try {
+      await careService.deleteEvent(eventId);
+      await notificationService.cancelAppointment(eventId);
+
+      setEvents((prev) => prev.filter((event) => event.id !== eventId));
+    } catch (error) {
+      console.error('Erro ao excluir consulta:', error);
     }
   };
 
@@ -231,6 +256,7 @@ function MainApp() {
             events={events}
             medicationSchedules={medicationSchedules}
             onAddQuestion={handleAddAppointmentQuestion}
+            onDeleteAppointment={handleDeleteAppointment}
           />
         )}
 
